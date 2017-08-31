@@ -1,0 +1,7 @@
+.radio-inline,
+.checkbox-inline,
+.checkbox-inline input[type=checkbox],
+.checkbox input[type=checkbox]
+{
+    cursor: pointer;
+}
