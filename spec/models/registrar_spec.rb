@@ -1,20 +1,51 @@
 require 'rails_helper'
 
-describe Registrar do
+RSpec.describe Registrar do
+  subject(:registrar) { described_class.new }
+
+  describe 'email validation', db: false do
+    it 'rejects absent' do
+      registrar.email = nil
+      registrar.validate
+      expect(registrar.errors).to be_added(:email, :blank)
+    end
+  end
+
+  describe 'country code validation', db: false do
+    it 'rejects absent' do
+      registrar.country_code = nil
+      registrar.validate
+      expect(registrar.errors).to be_added(:country_code, :blank)
+    end
+  end
+
+  describe 'name validation', db: false do
+    it 'rejects absent' do
+      registrar.name = nil
+      registrar.validate
+      expect(registrar.errors).to be_added(:name, :blank)
+    end
+  end
+
+  describe 'reg. no validation', db: false do
+    it 'rejects absent' do
+      registrar.reg_no = nil
+      registrar.validate
+      expect(registrar.errors).to be_added(:reg_no, :blank)
+    end
+  end
+
+  describe 'code validation', db: false do
+    it 'rejects absent' do
+      registrar.code = nil
+      registrar.validate
+      expect(registrar.errors).to be_added(:code, :blank)
+    end
+  end
+
   context 'with invalid attribute' do
     before :all do
       @registrar = Registrar.new
-    end
-
-    it 'is not valid' do
-      @registrar.valid?
-      @registrar.errors.full_messages.should match_array([
-        'Contact e-mail is missing',
-        'Country code is missing',
-        'Name is missing',
-        'Reg no is missing',
-        'Code is missing'
-      ])
     end
 
     it 'returns an error with invalid email' do

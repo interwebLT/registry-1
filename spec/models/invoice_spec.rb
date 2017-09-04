@@ -1,27 +1,69 @@
 require 'rails_helper'
 
-describe Invoice do
-  context 'with invalid attribute' do
-    before :all do
-      @invoice = Invoice.new
-    end
+RSpec.describe Invoice do
+  subject(:invoice) { described_class.new }
 
-    it 'should not be valid' do
-      @invoice.valid?
-      @invoice.errors.full_messages.should match_array([
-        "Buyer name is missing",
-        "Currency is missing",
-        "Due date is missing",
-        "Invoice items is missing",
-        "Invoice type is missing",
-        "Seller iban is missing",
-        "Seller name is missing",
-        "Vat prc is missing"
-      ])
+  describe 'buyer name validation', db: false do
+    it 'rejects absent' do
+      invoice.buyer_name = nil
+      invoice.validate
+      expect(invoice.errors).to be_added(:buyer_name, :blank)
     end
+  end
 
-    it 'should not have any versions' do
-      @invoice.versions.should == []
+  describe 'currency validation', db: false do
+    it 'rejects absent' do
+      invoice.currency = nil
+      invoice.validate
+      expect(invoice.errors).to be_added(:currency, :blank)
+    end
+  end
+
+  describe 'due date validation', db: false do
+    it 'rejects absent' do
+      invoice.due_date = nil
+      invoice.validate
+      expect(invoice.errors).to be_added(:due_date, :blank)
+    end
+  end
+
+  describe 'seller name validation', db: false do
+    it 'rejects absent' do
+      invoice.seller_name = nil
+      invoice.validate
+      expect(invoice.errors).to be_added(:seller_name, :blank)
+    end
+  end
+
+  describe 'seller iban validation', db: false do
+    it 'rejects absent' do
+      invoice.seller_iban = nil
+      invoice.validate
+      expect(invoice.errors).to be_added(:seller_iban, :blank)
+    end
+  end
+
+  describe 'vat prc validation', db: false do
+    it 'rejects absent' do
+      invoice.vat_prc = nil
+      invoice.validate
+      expect(invoice.errors).to be_added(:vat_prc, :blank)
+    end
+  end
+
+  describe 'invoice items validation', db: false do
+    it 'rejects absent' do
+      invoice.invoice_items = []
+      invoice.validate
+      expect(invoice.errors).to be_added(:invoice_items, :blank)
+    end
+  end
+
+  describe 'type validation', db: false do
+    it 'rejects absent' do
+      invoice.invoice_type = nil
+      invoice.validate
+      expect(invoice.errors).to be_added(:invoice_type, :blank)
     end
   end
 

@@ -1,20 +1,13 @@
 require 'rails_helper'
 
-describe Message do
-  context 'with invalid attribute' do
-    before :all do
-      @mssage = Message.new
-    end
+RSpec.describe Message do
+  subject(:message) { described_class.new }
 
-    it 'should not be valid' do
-      @mssage.valid?
-      @mssage.errors.full_messages.should match_array([
-        "Body is missing"
-      ])
-    end
-
-    it 'should not have any versions' do
-      @mssage.versions.should == []
+  describe 'body validation', db: false do
+    it 'rejects absent' do
+      message.body = nil
+      message.validate
+      expect(message.errors).to be_added(:body, :blank)
     end
   end
 

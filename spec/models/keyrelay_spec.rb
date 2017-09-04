@@ -1,6 +1,8 @@
 require 'rails_helper'
 
-describe Keyrelay do
+RSpec.describe Keyrelay do
+  subject(:keyrelay) { described_class.new }
+
   before :example do
     Setting.ds_algorithm = 2
     Setting.ds_data_allowed = true
@@ -24,26 +26,51 @@ describe Keyrelay do
     Fabricate(:zone, origin: 'ee')
   end
 
-  context 'with invalid attribute' do
-    before :example do
-      @keyrelay = Keyrelay.new
+  describe 'auth info pw validation' do
+    it 'rejects absent' do
+      keyrelay.auth_info_pw = nil
+      keyrelay.validate
+      expect(keyrelay.errors).to be_added(:auth_info_pw, :blank)
     end
+  end
 
-    it 'should not be valid' do
-      @keyrelay.valid?
-      @keyrelay.errors.full_messages.should match_array([
-        "Auth info pw Password is missing",
-        "Domain is missing",
-        "Key data alg Algorithm is missing",
-        "Key data flags Flag is missing",
-        "Key data protocol Protocol is missing",
-        "Key data public key Public key is missing",
-        "Only one parameter allowed: relative or absolute"
-      ])
+  describe 'domain validation' do
+    it 'rejects absent' do
+      keyrelay.domain = nil
+      keyrelay.validate
+      expect(keyrelay.errors).to be_added(:domain, :blank)
     end
+  end
 
-    it 'should not have any versions' do
-      @keyrelay.versions.should == []
+  describe 'key_data_public_key validation' do
+    it 'rejects absent' do
+      keyrelay.key_data_public_key = nil
+      keyrelay.validate
+      expect(keyrelay.errors).to be_added(:key_data_public_key, :blank)
+    end
+  end
+
+  describe 'key_data_flags validation' do
+    it 'rejects absent' do
+      keyrelay.key_data_flags = nil
+      keyrelay.validate
+      expect(keyrelay.errors).to be_added(:key_data_flags, :blank)
+    end
+  end
+
+  describe 'key_data_protocol validation' do
+    it 'rejects absent' do
+      keyrelay.key_data_protocol = nil
+      keyrelay.validate
+      expect(keyrelay.errors).to be_added(:key_data_protocol, :blank)
+    end
+  end
+
+  describe 'key_data_alg validation' do
+    it 'rejects absent' do
+      keyrelay.key_data_alg = nil
+      keyrelay.validate
+      expect(keyrelay.errors).to be_added(:key_data_alg, :blank)
     end
   end
 

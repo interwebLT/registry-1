@@ -1,16 +1,19 @@
 require 'rails_helper'
 
-describe Deposit do
+RSpec.describe Deposit do
+  subject(:deposit) { described_class.new }
+
+  describe 'registrar validation', db: false do
+    it 'rejects absent' do
+      deposit.registrar = nil
+      deposit.validate
+      expect(deposit.errors).to be_added(:registrar, :blank)
+    end
+  end
+
   context 'with invalid attribute' do
     before :all do
       @deposit = Deposit.new
-    end
-
-    it 'should not be valid' do
-      @deposit.valid?
-      @deposit.errors.full_messages.should match_array([
-        "Registrar is missing"
-      ])
     end
 
     it 'should have 0 amount' do

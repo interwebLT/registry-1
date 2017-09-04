@@ -1,21 +1,21 @@
 require 'rails_helper'
 
-describe BankStatement do
-  context 'with invalid attribute' do
-    before :all do
-      @bank_statement = BankStatement.new
-    end
+RSpec.describe BankStatement do
+  subject(:bank_statement) { described_class.new }
 
-    it 'should not be valid' do
-      @bank_statement.valid?
-      @bank_statement.errors.full_messages.should match_array([
-        "Bank code is missing",
-        "Iban is missing"
-      ])
+  describe 'bank code validation', db: false do
+    it 'rejects absent' do
+      bank_statement.bank_code = nil
+      bank_statement.validate
+      expect(bank_statement.errors).to be_added(:bank_code, :blank)
     end
+  end
 
-    it 'should not have any versions' do
-      @bank_statement.versions.should == []
+  describe 'iban validation', db: false do
+    it 'rejects absent' do
+      bank_statement.iban = nil
+      bank_statement.validate
+      expect(bank_statement.errors).to be_added(:iban, :blank)
     end
   end
 
